@@ -1,5 +1,7 @@
 import numpy as np
-from softpy import MetaHeuristicsAlgorithm
+import softpy
+from softpy.evolutionary.singlestate import MetaHeuristicsAlgorithm
+# from softpy.singlestate import MetaHeuristicsAlgorithm
 from particle_candidate import ParticleCandidate
 
 class ParticleSwarmOptimizer(MetaHeuristicsAlgorithm):
