@@ -2,21 +2,28 @@
 
 import numpy as np
 from softpy import FloatVectorCandidate
+from scipy.stats import uniform
 
 
 class ParticleCandidate(FloatVectorCandidate):
     def __init__(self, size, lower, upper, candidate, velocity,
                  inertia=0.5, wl=0.3, wn=0.3, wg=0.4):
-        super().__init__(candidate)
+        super().__init__(candidate = candidate, distribution = uniform, size = size)
         self.size = size
         self.lower = lower
         self.upper = upper
+        self.candidate = candidate
         self.velocity = velocity
+        if not np.isclose(wl + wn + wg, 1.0):
+            raise ValueError('weights must sum up to 1')
         self.inertia = inertia
         self.wl = wl
         self.wn = wn
         self.wg = wg
 
+    def __str__(self):
+        return (f'')
+    
     @classmethod
     def generate(cls, size, lower, upper,
                  inertia=0.5, wl=0.3, wn=0.3, wg=0.4):

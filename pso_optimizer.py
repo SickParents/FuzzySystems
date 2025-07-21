@@ -6,17 +6,18 @@ from particle_candidate import ParticleCandidate
 
 class ParticleSwarmOptimizer(MetaHeuristicsAlgorithm):
     def __init__(self, fitness_func, pop_size, n_neighbors, **kwargs):
-        super().__init__(fitness_func)
+        self.fitness_func = fitness_func
+        super().__init__(fitness_func = self.fitness_func, candidate_type = ParticleCandidate)
         self.pop_size = pop_size
         self.n_neighbors = n_neighbors
         self.kwargs = kwargs
 
         self.population = []
-        self.best = [None] * pop_size
-        self.fitness_best = np.full(pop_size, -np.inf)
+        self.best = None
+        self.fitness_best = None
 
         self.global_best = None
-        self.global_fitness_best = -np.inf
+        self.global_fitness_best = None
 
     def fit(self, n_iters):
         self.population = [
@@ -25,25 +26,30 @@ class ParticleSwarmOptimizer(MetaHeuristicsAlgorithm):
         ]
 
         for i, particle in enumerate(self.population):
-            fitness = self.fitness_function(particle)
-            self.best[i] = particle.copy()
-            self.fitness_best[i] = fitness
-
-            if fitness > self.global_fitness_best:
-                self.global_best = particle.copy()
+            fitness = self.fitness_func(particle)
+            self.best= [p for p in self.population]
+            self.fitness_best = np.array([self.fitness_func(p) for p in self.population])
+            
+            if self.global_fitness_best is not None:
+                if fitness > self.global_fitness_best:
+                    self.global_best = particle
+                    self.global_fitness_best = fitness
+            else:
                 self.global_fitness_best = fitness
 
         for _ in range(n_iters):
             for i, particle in enumerate(self.population):
-                fitness = self.fitness_function(particle)
+                fitness = self.fitness_func(particle)
 
-                if fitness > self.fitness_best[i]:
-                    self.fitness_best[i] = fitness
-                    self.best[i] = particle.copy()
+                if self.fitness_best[i] is not None:
+                    if fitness > self.fitness_best[i]:
+                        self.fitness_best[i] = fitness
+                        self.best[i] = particle
 
-                if fitness > self.global_fitness_best:
-                    self.global_fitness_best = fitness
-                    self.global_best = particle.copy()
+                if self.global_fitness_best is not None:
+                    if fitness > self.global_fitness_best:
+                        self.global_fitness_best = fitness
+                        self.global_best = particle
 
             for i, particle in enumerate(self.population):
                 indices = [j for j in range(self.pop_size) if j != i]

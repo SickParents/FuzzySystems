@@ -1,5 +1,7 @@
 import numpy as np
 from pso_optimizer import ParticleSwarmOptimizer
+from particle_candidate import ParticleCandidate
+
 
 # Funzione da massimizzare: Sphere (minimo globale = 0, massimo = 0)
 def sphere_fitness(particle):
