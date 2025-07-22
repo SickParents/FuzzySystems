@@ -38,16 +38,16 @@ class ParticleCandidate(FloatVectorCandidate):
     '''
     def __init__(self, size, lower, upper, candidate, velocity,
                  inertia=0.5, wl=0.3, wn=0.3, wg=0.4, distribution = uniform):
-        super().__init__(candidate = candidate, distribution = distribution, size = size)    # Initialize base class (FloatVectorCandidate) with candidate position and distribution
-        self.size = size                                                        # Dimensionality of the solution
-        self.lower = lower                                                      # Lower bounds of the search space
-        self.upper = upper                                                      # Upper bounds of the search space
-        self.velocity = velocity                                                # Velocity vector of the particle
-        self.inertia = inertia                                                  # Weight of current velocity
-        self.wl = wl                                                            # Weight for local best attraction
-        self.wn = wn                                                            # Weight for neighborhood best attraction
-        self.wg = wg
-                                                                    # Weight for global best attraction
+        super().__init__(candidate = candidate, distribution = distribution, size = size)   # Initialize base class (FloatVectorCandidate) with candidate position and distribution
+        self.size = size                                                                    # Dimensionality of the solution
+        self.lower = lower                                                                  # Lower bounds of the search space
+        self.upper = upper                                                                  # Upper bounds of the search space
+        self.velocity = velocity                                                            # Velocity vector of the particle
+        self.inertia = inertia                                                              # Weight of current velocity
+        self.wl = wl                                                                        # Weight for local best attraction
+        self.wn = wn                                                                        # Weight for neighborhood best attraction
+        self.wg = wg                                                                        # Weight for global best attraction
+                                                                                            
     def __str__(self) -> str:
         # Safely shorten arrays for display
         cand_preview = np.array2string(self.candidate, precision=3, max_line_width=60, threshold=5)
