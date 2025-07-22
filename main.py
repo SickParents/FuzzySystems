@@ -53,4 +53,4 @@ if __name__ == "__main__":
 
     # --- Print results ---
     print("Best fitness found:", pso.global_fitness_best)
-    print("Best solution found:", pso.global_best)
+    print("Best solution found:", str(pso.global_best))

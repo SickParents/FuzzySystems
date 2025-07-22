@@ -1,5 +1,6 @@
 import numpy as np
 from softpy import FloatVectorCandidate
+from scipy.stats import uniform
 
 class ParticleCandidate(FloatVectorCandidate):
     '''
@@ -36,16 +37,31 @@ class ParticleCandidate(FloatVectorCandidate):
     :type wg: float, default=0.4
     '''
     def __init__(self, size, lower, upper, candidate, velocity,
-                 inertia=0.5, wl=0.3, wn=0.3, wg=0.4):
-        super().__init__(candidate)      # Initialize base class with candidate position
-        self.size = size                 # Dimensionality of the solution
-        self.lower = lower               # Lower bounds of the search space
-        self.upper = upper               # Upper bounds of the search space
-        self.velocity = velocity         # Velocity vector of the particle
-        self.inertia = inertia           # Weight of current velocity
-        self.wl = wl                     # Weight for local best attraction
-        self.wn = wn                     # Weight for neighborhood best attraction
-        self.wg = wg                     # Weight for global best attraction
+                 inertia=0.5, wl=0.3, wn=0.3, wg=0.4, distribution = uniform):
+        super().__init__(candidate = candidate, distribution = distribution, size = size)    # Initialize base class (FloatVectorCandidate) with candidate position and distribution
+        self.size = size                                                        # Dimensionality of the solution
+        self.lower = lower                                                      # Lower bounds of the search space
+        self.upper = upper                                                      # Upper bounds of the search space
+        self.velocity = velocity                                                # Velocity vector of the particle
+        self.inertia = inertia                                                  # Weight of current velocity
+        self.wl = wl                                                            # Weight for local best attraction
+        self.wn = wn                                                            # Weight for neighborhood best attraction
+        self.wg = wg
+                                                                    # Weight for global best attraction
+    def __str__(self) -> str:
+        # Safely shorten arrays for display
+        cand_preview = np.array2string(self.candidate, precision=3, max_line_width=60, threshold=5)
+        vel_preview = np.array2string(self.velocity, precision=3, max_line_width=60, threshold=5)
+
+        return (
+            f"ParticleCandidate(\n"
+            f"  size={self.size}, inertia={self.inertia}, "
+            f"wl={self.wl}, wn={self.wn}, wg={self.wg}\n"
+            f"  position={cand_preview}\n"
+            f"  velocity={vel_preview}\n"
+            f")"
+        )
+
 
     @classmethod
     def generate(cls, size, lower, upper,
